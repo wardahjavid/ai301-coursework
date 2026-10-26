@@ -1,23 +1,27 @@
 # Rubric: is this a good first issue?
 
+All dates are measured against the bundle's capture date in eval mode and
+against today in live mode. "Maintainer" means a commenter or author whose
+author_association is OWNER, MEMBER, or COLLABORATOR.
+
 ## Checks
 
 | Check | Evidence | Pass condition | Weight |
 |---|---|---|---|
-| Concrete outcome | Issue title, body, and maintainer comments describing the requested change or incorrect behavior | Pass if the issue states a specific behavior to change, bug to fix, or output to produce. Fail if the requested result cannot be identified from the available issue evidence. | required |
-| Bounded scope | Issue body, comments, referenced components/files, and repo facts describing the work involved | Pass if the issue describes one coherent change or one closely related set of changes. Fail if it explicitly requires a repository-wide migration, major redesign, broad refactor, or coordinated changes across more than two independent subsystems. | required |
-| Verifiable result | Reproduction steps, examples, expected behavior, tests, acceptance criteria, or another stated way to tell when the issue is fixed | Pass if the available evidence gives at least one objective way to determine whether the change works. Fail if success would depend only on subjective judgment or unstated expectations. | required |
-| No unresolved blocker | Issue body and comments for dependencies, pending decisions, missing information, inaccessible services, credentials, or maintainer action | Pass if no unresolved dependency prevents a contributor from beginning and testing the work. Fail if the issue explicitly depends on an unanswered design decision, unavailable private resource, missing credentials, or another unfinished issue that must be completed first. | required |
-| Repository-local work | Issue body, comments, and repo facts describing required systems and dependencies | Pass if the contribution can be implemented and meaningfully verified using the repository and resources available to a normal contributor. Fail if completion requires access to a private production environment, organization-only system, proprietary data, or another inaccessible resource. | required |
-| Starting-point evidence | File names, module/component names, stack traces, reproduction steps, code references, linked tests, or other concrete pointers | Pass if at least one concrete starting point is provided. Mark unclear if none is provided. | preferred |
-| Existing verification support | Existing or requested tests, reproducible commands, screenshots/examples, or clearly stated expected output | Pass if the issue provides a strong verification path that would make implementation easier for a newcomer. Mark unclear if the issue does not provide this evidence. | preferred |
+| not-archived | The "archived:" field on the repo line under Repo facts (live: the archived banner on the repo front page). | `archived: no`. | required |
+| maintainer-alive | The "last 5 default-branch commits" list under Repo facts (live: the repo's commit history), with dates and author names. | At least one of the last 5 default-branch commits is dated within 90 days of the capture date and is authored by a human account (a username not ending in `[bot]`). | required |
+| repo-in-use | "last push to any branch" and "latest release" under Repo facts (live: newest commit date and the Releases sidebar). | Last push to any branch is within 180 days of the capture date. A missing or old release does not fail this check on its own. | required |
+| bounded-scope | The issue body and the full comment thread. | The issue asks for one piece of work that a single pull request can deliver. Fail if any of these is true: (a) the body or a maintainer calls it an umbrella, tracking, or meta issue, or it lists sub-items meant to be split into separate PRs; (b) the thread shows the approach is still being debated and no maintainer has stated which approach to take; (c) a maintainer says the fix needs changes to core internals or a redesign; (d) it is a usage or support question with nothing to change in the repo; (e) the issue has two or more closed, unmerged PRs in its history and has been open more than 1 year. A short body, a checklist, or missing repro steps do not fail this check by themselves. | required |
+| unclaimed | "this issue: assignees" and "linked PRs" under Repo facts, plus every PR link or claim comment in the Comments section. | All three hold: (1) assignees is `none`; (2) no OPEN pull request (linked, or mentioned in a comment, including PRs from forks) targets this issue; (3) no comment dated within 30 days of the capture date says the commenter is working on it or will take it, unless a later comment says that person stopped. In live mode on the Path Review repo, apply the scope.md house rule: classmates' claim comments do not count for part (3). | required |
+| ai-policy-allows | The "contribution policy" line under Repo facts (live: CONTRIBUTING.md, AI_POLICY.md, and PR templates). | Fail only if the policy states the project does not accept, bans, or prohibits AI-generated or AI-assisted contributions. Conditions (disclose AI use, review and understand the code, test it, human review), discouragement without a ban, an AGENTS.md file, or no policy at all pass. | required |
+| maintainer-engaged | The issue's "opened by" line and the author_association of each commenter. | The issue was opened by a maintainer, or a maintainer has commented in the thread. | preferred |
+| newcomer-label | The issue's labels. | Carries a label such as `good first issue`, `easy`, or `help wanted`. | preferred |
 
 ## Verdict rule
 
-Accept an issue only if every `required` check passes.
-
-If any required check is `fail` or `unclear`, reject the issue.
-
-`preferred` checks never change an accept/reject verdict. They are used only to rank issues that already pass every required check.
-
-When several issues are accepted, prefer issues with more passing preferred checks. In live mode, use the fit profile in `scope.md` as the final ranking factor among accepted issues.
+Accept if every `required` check passes; reject if any `required` check
+fails. `unclear` on a required check counts as fail, with one exception:
+`ai-policy-allows` grades `pass` when no policy is found, because silence
+is not a restriction. `preferred` checks never change the verdict; they
+only rank accepted issues (more preferred passes ranks higher, then the
+fit profile in scope.md in live mode).
